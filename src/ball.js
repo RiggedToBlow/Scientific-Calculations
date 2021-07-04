@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
 import { body2mesh } from "./body2mesh";
+import { currentMaterial } from "./defaultTexture";
 
 export class Ball {
   constructor(radius, position) {
@@ -9,7 +10,7 @@ export class Ball {
       mass: 100,
       linearDamping: 0.2,
     });
-    this.ballMesh = body2mesh(this.ballBody);
+    this.ballMesh = body2mesh(this.ballBody, currentMaterial);
     console.log(this.ballMesh, this.ballBody);
     this.position = position;
   }
