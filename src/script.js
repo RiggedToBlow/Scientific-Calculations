@@ -45,6 +45,8 @@ const environmentMapTexture = cubeTextureLoader.load([
 
 
 const world = new CANNON.World()
+
+/* default gravity of the world a = g = -9.8 */
 world.gravity.set(0, -9.8, 0)
 
 /**
