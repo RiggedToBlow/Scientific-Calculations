@@ -83,7 +83,7 @@ export class FrictionHandler {
     this.velocity *= this.bouncePercentage;
     /* bounce percentage is a number between 0 - 1 that reduces
 	the speed of the ball for every contact with any object */
-    this.energyLoss;
+    this.energyLoss();
   }
 
   energyLoss() {
