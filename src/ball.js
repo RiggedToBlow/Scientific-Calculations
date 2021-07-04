@@ -18,7 +18,7 @@ export class Ball {
 
 	set position(pos) {
 		const { x, y, z } = pos
-		if (!!this.ballMesh){jfjyfjyfj
+		if (!!this.ballMesh){
 			this.ballMesh.position.x = x
 			this.ballMesh.position.y = y
 			this.ballMesh.position.z = z
