@@ -78,14 +78,19 @@ export class Ball {
   applyImpulse(vector) {
     /* calculating speed using motion formula */
     /* x = vx.t + x0 */
-    Dx = this.position.x2 - this.position.x1;
-    Dy = this.position.y2 - this.position.y1;
-    Dz = this.position.z2 - this.position.z1;
+    const Dx = this.position.x2 - this.position.x1;
+    const Dy = this.position.y2 - this.position.y1;
+    const Dz = this.position.z2 - this.position.z1;
 
     this.speedOnX = Dx;
     this.speedOnY = Dy;
     this.speedOnZ = Dz;
-    this.ballBody.applyImpulse(vector);
+		const ve = new CANNON.Vec3(0,0,0)
+		ve.dot(new CANNON.Vec3(10,10,10))
+		console.log(vector)
+		const v = vector.vmul(new CANNON.Vec3(10,10,10))
+		console.log(v)
+    this.ballBody.applyImpulse(v);
   }
 
   reactionForce() {
