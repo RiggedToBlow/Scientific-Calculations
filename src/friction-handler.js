@@ -14,14 +14,29 @@ export class FrictionHandler {
 
 	constructor() {
 		this.world = new CANNON.World()
-		this.scene = new THREE.Scene()
-		this.canvas = document.querySelector('canvas.webgl')
-		this.initializeCamera()
-		// Controls
-		this.controls = new OrbitControls(this.camera, this.canvas)
-		this.controls.enableDamping = true
+		this.gravity = -9.8
+		this.initializeFriction()
 	}
 
+
+	initializeFriction() {
+		const defaultMaterial = new CANNON.Material('default')
+
+		this.contactMaterial = new CANNON.ContactMaterial(
+			defaultMaterial,
+			defaultMaterial,
+			{
+				friction: 1e9,
+				restitution: 0.4,
+				contactEquationStiffness: 1e8,
+				contactEquationRelaxation: 3,
+				frictionEquationStiffness: 1e8,
+				frictionEquationRegularizationTime: 10,
+			}
+		)
+
+		this.world.defaultContactMaterial = this.contactMaterial
+	}
 
 
 	initializeCamera() {
@@ -33,16 +48,23 @@ export class FrictionHandler {
 	set gravity(gr) {
 		this.world.gravity.set(0, gr, 0)
 	}
+	get gravity() {
+		return this.world.gravity.y
+	}
+
+	set friction(fr) {
+		this.contactMaterial.friction=fr
+	}
+
+	set bounce(bo){
+		this.contactMaterial.restitution=bo
+	}
+	get bounce(){return this.contactMaterial.restitution}
+
 
 	addBody(body) {
 		this.world.addBody(body)
-		const mesh = body2mesh(body)
-		this.scene.add(mesh)
-		return mesh
 	}
-
-
-
 
 
 }
