@@ -77,13 +77,13 @@ export class Ball {
   applyImpulse(vector) {
     /* calculating speed using motion formula */
     /* x = vx.t + x0 */
-    Dx = this.position.x2 - this.position.x1;
-    Dy = this.position.y2 - this.position.y1;
-    Dz = this.position.z2 - this.position.z1;
+    this.Dx -= this.position.x;
+    this.Dy -= this.position.y;
+    this.Dz -= this.position.z;
 
-    this.speedOnX = Dx;
-    this.speedOnY = Dy;
-    this.speedOnZ = Dz;
+    this.speedOnX = this.Dx;
+    this.speedOnY = this.Dy;
+    this.speedOnZ = this.Dz;
     this.ballBody.applyImpulse(vector);
   }
 
