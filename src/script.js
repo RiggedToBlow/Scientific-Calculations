@@ -2,11 +2,11 @@ import * as CANNON from "cannon-es";
 import * as dat from "dat.gui";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { Ball } from "./ball";
-import { body2mesh } from "./body2mesh";
-import { currentMaterial } from "./defaultTexture";
+import { Ball } from "./GeometryShapes./ball";
+import { body2mesh } from "./GeometryShapes./body2mesh";
+import { currentMaterial } from "./GeometryShapes./defaultTexture";
 import { FrictionHandler } from "./friction-handler";
-import { groundMaterial, torusMaterial } from "./grassTexture";
+import { groundMaterial, torusMaterial } from "./GeometryShapes./grassTexture";
 import "./style.css";
 
 /**
