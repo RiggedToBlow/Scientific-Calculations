@@ -4,7 +4,6 @@ import { body2mesh } from './body2mesh'
 
 export class Ball {
 
-
 	constructor(radius, position) {
 		this.ballBody= new CANNON.Body({
 			shape: new CANNON.Sphere(radius),
@@ -18,29 +17,34 @@ export class Ball {
 
 	set position(pos) {
 		const { x, y, z } = pos
-		if (!!this.ballMesh){
+		if (!!this.ballMesh) {
 			this.ballMesh.position.x = x
 			this.ballMesh.position.y = y
 			this.ballMesh.position.z = z
 		}
-		if(!!this.ballBody){
+		if (!!this.ballBody) {
 			this.ballBody.position.x = x
 			this.ballBody.position.y = y
 			this.ballBody.position.z = z
 		}
 	}
+
 	get position() {
 		return this.ballBody.position
-	}
 
+		/* position getter */
+	}
 
 	set mass(mass) {
 		this.ballBody.mass = mass
+
+		/* mass setter */
 	}
 
 	get mass() {
 		return this.ballBody.mass
 	}
+
 	set friction(fric) {
 		this.ballBody.linearDamping = fric
 	}
@@ -57,16 +61,20 @@ export class Ball {
 		return this.ballBody.linearDamping
 	}
 
-
 	applyForce(vector) {
 		this.ballBody.applyForce(vector)
-		/* TODO habid here */
+
+		/* F = m*a */
+		/* vy = a*t + v0 */
+		this.hitForce = (this.mass)*80
 	}
 
 	applyImpulse(vector) {
 		this.ballBody.applyImpulse(vector)
-		/* TODO more habid here please */
-	}
 
+		/* calculating speed using motion formula */
+		/* x = vx*t + x0 */
+		this.speed = this.velocity
+	}
 
 }

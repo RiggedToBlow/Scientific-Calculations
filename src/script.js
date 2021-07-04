@@ -44,23 +44,7 @@ const environmentMapTexture = cubeTextureLoader.load([
  * physics
  */
 
-
-/*const world = new CANNON.World()
-world.gravity.set(0, -9.8, 0)
-*/
-
 const frictionHandler = new FrictionHandler()
-
-/**
- *  add default contactMaterial
- */
-
-
-
-/**
- * physics sphere
- */
-
 
 const ball = new Ball(0.5,new CANNON.Vec3(-10, 20, 0) )
 console.log(ball)
