@@ -25,7 +25,7 @@ export class FrictionHandler {
     /* initialize friction of geometry shapes */
 
     this.reactionBounce();
-	/* initialize bounce constants and energy loss */
+    /* initialize bounce constants and energy loss */
 
     this.contactMaterial = new CANNON.ContactMaterial(
       defaultMaterial,
@@ -89,7 +89,7 @@ export class FrictionHandler {
   energyLoss() {
     /* energy lost by heat , sound and light
 	Eh = m.Cp.dT */
-    this.lostEnergy = Ball.mass * this.lossConstant;
+    Ball.lostEnergy = Ball.mass * this.lossConstant;
   }
 
   set bounce(bo) {
