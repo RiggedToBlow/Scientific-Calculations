@@ -28,7 +28,7 @@ export class Ball {
 			this.ballBody.position.z = z
 		}
 	}
-	
+
 	get position() {
 		return this.ballBody.position
 
