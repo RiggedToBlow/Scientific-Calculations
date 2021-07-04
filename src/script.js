@@ -4,7 +4,9 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Ball } from './ball'
 import { body2mesh } from './body2mesh'
+import { currentMaterial } from './defaultTexture'
 import { FrictionHandler } from './friction-handler'
+import { groundMaterial } from './grassTexture'
 import './style.css'
 
 /**
@@ -16,6 +18,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+scene.background = new THREE.Color(0xcce0ff);
 
 
 // raycaster
@@ -46,7 +49,7 @@ const environmentMapTexture = cubeTextureLoader.load([
 
 const frictionHandler = new FrictionHandler()
 
-const ball = new Ball(0.5,new CANNON.Vec3(-10, 20, 0) )
+const ball = new Ball(0.5, new CANNON.Vec3(-10, 20, 0))
 console.log(ball)
 const floorShape = new CANNON.Plane()
 const floorBody = new CANNON.Body({
@@ -71,17 +74,15 @@ torusBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
 /*torusBody.angularVelocity.set(0, -1, 0)*/
 frictionHandler.addBody(torusBody)
 
-
-const groundShape = new CANNON.Box(new CANNON.Vec3(20, 3, 20))
+const groundShape = new CANNON.Box(new CANNON.Vec3(500, 3, 500))
 const groundBody = new CANNON.Body({
 	shape: groundShape,
 	position: new CANNON.Vec3(0, 6, 0),
 	mass: 100000
 })
 frictionHandler.addBody(groundBody)
-const groundMesh = body2mesh(groundBody)
+const groundMesh = body2mesh(groundBody, groundMaterial)
 scene.add(groundMesh)
-
 /**
  * Torus Mesh
  */
@@ -213,6 +214,8 @@ window.addEventListener('keydown', (event) => {
 
 
 const animate = (mesh, body) => {
+	const { x, y, z } = body.position
+	/*console.log({x,y,z})*/
 	mesh.position.copy(body.position)
 	mesh.quaternion.copy(body.quaternion)
 }
@@ -246,13 +249,13 @@ const debugObject = {
 /**
  * Balls input
  */
- const ballFolder = gui.addFolder('Ball')
- ballFolder.add(ball, 'mass', 10, 500, 1)
- ballFolder.open()
- ballFolder.add(debugObject, 'Force', 150, 800, 10)
- ballFolder.add(debugObject, 'y', 0, 1, 0.1)
- ballFolder.add(debugObject, 'resetBall',)
- 
+const ballFolder = gui.addFolder('Ball')
+ballFolder.add(ball, 'mass', 10, 500, 1)
+ballFolder.open()
+ballFolder.add(debugObject, 'Force', 150, 800, 10)
+ballFolder.add(debugObject, 'y', 0, 1, 0.1)
+ballFolder.add(debugObject, 'resetBall',)
+
 
 /**
  * wind input
@@ -278,7 +281,7 @@ frictionHandlerFolder.add(frictionHandler, 'gravity', -20, 0, 0.1)
  */
 const clock = new THREE.Clock()
 let oldElapsedTime = 0
-const tick = () => {
+const onEachFrame = () => {
 	const elapsedTime = clock.getElapsedTime()
 	const deltaTime = elapsedTime - oldElapsedTime
 	oldElapsedTime = elapsedTime
@@ -295,7 +298,7 @@ const tick = () => {
 	renderer.render(scene, camera)
 
 	// Call tick again on the next frame
-	window.requestAnimationFrame(tick)
+	window.requestAnimationFrame(onEachFrame)
 }
 
-tick()
+onEachFrame()
