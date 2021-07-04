@@ -6,7 +6,7 @@ import { Ball } from './ball'
 import { body2mesh } from './body2mesh'
 import { currentMaterial } from './defaultTexture'
 import { FrictionHandler } from './friction-handler'
-import { groundMaterial } from './grassTexture'
+import { groundMaterial, torusMaterial } from './grassTexture'
 import './style.css'
 
 /**
@@ -89,15 +89,9 @@ scene.add(groundMesh)
 
 const torusMesh = new THREE.Mesh(
 	new THREE.TorusGeometry(3, 3.5, 16, 16),
-	new THREE.MeshStandardMaterial({
-		metalness: 0.1,
-		roughness: 0.1,
-		envMap: environmentMapTexture
-	})
+	torusMaterial
 )
 
-/*torusMesh.position.set(0.01, 0.01, 0.01)
-torusMesh.quaternion.setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0, 'xzy'))*/
 scene.add(torusMesh)
 
 /**
@@ -240,6 +234,9 @@ const debugObject = {
 		ball.position = new CANNON.Vec3(-10, 20, 0)
 		ball.velocity = new CANNON.Vec3(0, 0, 0)
 	},
+	goToBall: ()=>{
+		camera.position.copy(ball.position)
+	},
 	windX: 0,
 	windZ: 0
 }
@@ -252,9 +249,10 @@ const debugObject = {
 const ballFolder = gui.addFolder('Ball')
 ballFolder.add(ball, 'mass', 10, 500, 1)
 ballFolder.open()
-ballFolder.add(debugObject, 'Force', 150, 800, 10)
+ballFolder.add(debugObject, 'Force', 10, 800, 10)
 ballFolder.add(debugObject, 'y', 0, 1, 0.1)
 ballFolder.add(debugObject, 'resetBall',)
+ballFolder.add(debugObject, 'goToBall',)
 
 
 /**
