@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
-import { body2mesh } from "./body2mesh";
-import { Ball } from "./ball";
+import { body2mesh } from "./GeometryShapes/body2mesh";
+import { Ball } from "./GeometryShapes/ball";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const sizes = {
