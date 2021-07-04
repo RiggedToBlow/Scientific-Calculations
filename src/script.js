@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Ball } from './ball'
 import { body2mesh } from './body2mesh'
+import { FrictionHandler } from './friction-handler'
 import './style.css'
 
 /**
@@ -44,31 +45,15 @@ const environmentMapTexture = cubeTextureLoader.load([
  */
 
 
-const world = new CANNON.World()
+/*const world = new CANNON.World()
 world.gravity.set(0, -9.8, 0)
+*/
+
+const frictionHandler = new FrictionHandler()
 
 /**
  *  add default contactMaterial
  */
-
-const defaultMaterial = new CANNON.Material('default')
-
-const contactMaterial = new CANNON.ContactMaterial(
-	defaultMaterial,
-	defaultMaterial,
-	{
-		friction: 1e9,
-		restitution: 0.4,
-		contactEquationStiffness: 1e8,
-		contactEquationRelaxation: 3,
-		frictionEquationStiffness: 1e8,
-		frictionEquationRegularizationTime: 10,
-	}
-)
-
-
-
-world.defaultContactMaterial = contactMaterial
 
 
 
@@ -86,8 +71,9 @@ const floorBody = new CANNON.Body({
 })
 
 floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5)
-world.addBody(floorBody)
-world.addBody(ball.ballBody)
+
+frictionHandler.addBody(floorBody)
+frictionHandler.addBody(ball.ballBody)
 scene.add(ball.ballMesh)
 
 /***
@@ -99,7 +85,7 @@ torusBody.addShape(torusShape)
 torusBody.position.set(5, 3.3, 0)
 torusBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
 /*torusBody.angularVelocity.set(0, -1, 0)*/
-world.addBody(torusBody)
+frictionHandler.addBody(torusBody)
 
 
 const groundShape = new CANNON.Box(new CANNON.Vec3(20, 3, 20))
@@ -108,7 +94,7 @@ const groundBody = new CANNON.Body({
 	position: new CANNON.Vec3(0, 6, 0),
 	mass: 100000
 })
-world.addBody(groundBody)
+frictionHandler.addBody(groundBody)
 const groundMesh = body2mesh(groundBody)
 scene.add(groundMesh)
 
@@ -271,23 +257,35 @@ const debugObject = {
 	windZ: 0
 }
 
-gui.add(debugObject, 'Force', 150, 800, 10)
-gui.add(debugObject, 'y', 0, 1, 0.1)
-gui.add(debugObject, 'resetBall',)
-gui.add(debugObject, 'windX', -100, 100, 1)
-gui.add(debugObject, 'windZ', -100, 100, 1)
-gui.add(world.gravity, 'y', -20, 0, 0.1)
+
 
 /**
  * Balls input
  */
-const ballFolder = gui.addFolder('Ball')
-ballFolder.add(ball, 'mass', 10, 500, 1)
-ballFolder.add(ball, 'friction', -0.75, 0.75, 0.01)
-ballFolder.open()
+ const ballFolder = gui.addFolder('Ball')
+ ballFolder.add(ball, 'mass', 10, 500, 1)
+ ballFolder.open()
+ ballFolder.add(debugObject, 'Force', 150, 800, 10)
+ ballFolder.add(debugObject, 'y', 0, 1, 0.1)
+ ballFolder.add(debugObject, 'resetBall',)
+ 
 
-const contactMaterialFolder = gui.addFolder('Utils')
-contactMaterialFolder.add(contactMaterial, 'restitution', 0, 1, 0.01)
+/**
+ * wind input
+ */
+
+const windFolder = gui.addFolder('Wind')
+windFolder.add(debugObject, 'windX', -100, 100, 1)
+windFolder.add(debugObject, 'windZ', -100, 100, 1)
+
+
+/**
+ * Friction Handler input
+ */
+const frictionHandlerFolder = gui.addFolder('Friction Handler')
+frictionHandlerFolder.add(frictionHandler, 'bounce', 0, 1, 0.01)
+frictionHandlerFolder.add(ball, 'friction', -0.75, 0.75, 0.01)
+frictionHandlerFolder.add(frictionHandler, 'gravity', -20, 0, 0.1)
 
 
 
@@ -301,7 +299,7 @@ const tick = () => {
 	const deltaTime = elapsedTime - oldElapsedTime
 	oldElapsedTime = elapsedTime
 	// update physics world
-	world.step(1 / 60, deltaTime, 3)
+	frictionHandler.world.step(1 / 60, deltaTime, 3)
 	animatables.forEach(({ mesh, body }) => animate(mesh, body))
 
 	ball.applyForce(new CANNON.Vec3(debugObject.windX, 0, debugObject.windZ))
