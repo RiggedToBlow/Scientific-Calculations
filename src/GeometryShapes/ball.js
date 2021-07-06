@@ -1,12 +1,12 @@
 import * as THREE from "three";
-import * as CANNON from "cannon-es";
+import * as UTILS from "cannon-es";
 import { body2mesh } from "./body2mesh";
 import { currentMaterial } from "./defaultTexture";
 
 export class Ball {
   constructor(radius, position) {
-    this.ballBody = new CANNON.Body({
-      shape: new CANNON.Sphere(radius),
+    this.ballBody = new UTILS.Body({
+      shape: new UTILS.Sphere(radius),
       mass: 100,
       linearDamping: 0.2,
     });
@@ -85,10 +85,10 @@ export class Ball {
     this.speedOnX = this.Dx;
     this.speedOnY = this.Dy;
     this.speedOnZ = this.Dz;
-    const ve = new CANNON.Vec3(0, 0, 0);
-    ve.dot(new CANNON.Vec3(10, 10, 10));
+    const ve = new UTILS.Vec3(0, 0, 0);
+    ve.dot(new UTILS.Vec3(10, 10, 10));
     console.log(vector);
-    const v = vector.vmul(new CANNON.Vec3(10, 10, 10));
+    const v = vector.vmul(new UTILS.Vec3(10, 10, 10));
     console.log(v);
     this.ballBody.applyImpulse(v);
   }

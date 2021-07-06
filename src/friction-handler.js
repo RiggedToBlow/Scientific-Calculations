@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import * as CANNON from "cannon-es";
+import * as UTILS from "cannon-es";
 import { body2mesh } from "./GeometryShapes/body2mesh";
 import { Ball } from "./GeometryShapes/ball";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -11,14 +11,14 @@ const sizes = {
 
 export class FrictionHandler {
   constructor() {
-    this.world = new CANNON.World();
+    this.world = new UTILS.World();
     this.y = 20;
     this.gravity = -9.8;
     this.initializeFriction();
   }
 
   initializeFriction() {
-    const defaultMaterial = new CANNON.Material("default");
+    const defaultMaterial = new UTILS.Material("default");
 
     this.generalFriction();
     this.FriForce = this.frictionDirection();
@@ -27,7 +27,7 @@ export class FrictionHandler {
     this.reactionBounce();
     /* initialize bounce constants and energy loss */
 
-    this.contactMaterial = new CANNON.ContactMaterial(
+    this.contactMaterial = new UTILS.ContactMaterial(
       defaultMaterial,
       defaultMaterial,
       {

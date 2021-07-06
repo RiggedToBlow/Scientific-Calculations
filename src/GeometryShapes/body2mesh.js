@@ -1,5 +1,5 @@
 import * as THREE from "THREE";
-import * as CANNON from "cannon-es";
+import * as UTILS from "cannon-es";
 
 export function body2mesh(body, currentMaterial) {
   var wireframe = wireframe || true;
@@ -11,18 +11,18 @@ export function body2mesh(body, currentMaterial) {
     var mesh;
 
     switch (shape.type) {
-      case CANNON.Shape.types.SPHERE:
+      case UTILS.Shape.types.SPHERE:
         var sphere_geometry = new THREE.SphereGeometry(shape.radius, 8, 8);
         mesh = new THREE.Mesh(sphere_geometry, currentMaterial);
         break;
 
-      case CANNON.Shape.types.PARTICLE:
+      case UTILS.Shape.types.PARTICLE:
         mesh = new THREE.Mesh(this.particleGeo, currentMaterial);
         var s = this.settings;
         mesh.scale.set(s.particleSize, s.particleSize, s.particleSize);
         break;
 
-      case CANNON.Shape.types.PLANE:
+      case UTILS.Shape.types.PLANE:
         var geometry = new THREE.PlaneGeometry(10, 10, 4, 4);
         mesh = new THREE.Object3D();
         var submesh = new THREE.Object3D();
@@ -36,7 +36,7 @@ export function body2mesh(body, currentMaterial) {
         mesh.add(submesh);
         break;
 
-      case CANNON.Shape.types.BOX:
+      case UTILS.Shape.types.BOX:
         var box_geometry = new THREE.BoxGeometry(
           shape.halfExtents.x * 2,
           shape.halfExtents.y * 2,
@@ -45,7 +45,7 @@ export function body2mesh(body, currentMaterial) {
         mesh = new THREE.Mesh(box_geometry, currentMaterial);
         break;
 
-      case CANNON.Shape.types.CONVEXPOLYHEDRON:
+      case UTILS.Shape.types.CONVEXPOLYHEDRON:
         var geo = new THREE.Geometry();
 
         // Add vertices
@@ -70,12 +70,12 @@ export function body2mesh(body, currentMaterial) {
         mesh = new THREE.Mesh(geo, currentMaterial);
         break;
 
-      case CANNON.Shape.types.HEIGHTFIELD:
+      case UTILS.Shape.types.HEIGHTFIELD:
         var geometry = new THREE.Geometry();
 
-        var v0 = new CANNON.Vec3();
-        var v1 = new CANNON.Vec3();
-        var v2 = new CANNON.Vec3();
+        var v0 = new UTILS.Vec3();
+        var v1 = new UTILS.Vec3();
+        var v2 = new UTILS.Vec3();
         for (var xi = 0; xi < shape.data.length - 1; xi++) {
           for (var yi = 0; yi < shape.data[xi].length - 1; yi++) {
             for (var k = 0; k < 2; k++) {
@@ -101,12 +101,12 @@ export function body2mesh(body, currentMaterial) {
         mesh = new THREE.Mesh(geometry, currentMaterial);
         break;
 
-      case CANNON.Shape.types.TRIMESH:
+      case UTILS.Shape.types.TRIMESH:
         var geometry = new THREE.Geometry();
 
-        var v0 = new CANNON.Vec3();
-        var v1 = new CANNON.Vec3();
-        var v2 = new CANNON.Vec3();
+        var v0 = new UTILS.Vec3();
+        var v1 = new UTILS.Vec3();
+        var v2 = new UTILS.Vec3();
         for (var i = 0; i < shape.indices.length / 3; i++) {
           shape.getTriangleVertices(i, v0, v1, v2);
           geometry.vertices.push(

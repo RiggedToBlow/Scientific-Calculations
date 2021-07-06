@@ -1,10 +1,10 @@
-import * as CANNON from "cannon-es";
+import * as UTILS from "cannon-es";
 
 /**
  *  add default contactMaterial
  */
-const defaultMaterial = new CANNON.Material("default");
-export const contactMaterial = new CANNON.ContactMaterial(
+const defaultMaterial = new UTILS.Material("default");
+export const contactMaterial = new UTILS.ContactMaterial(
   defaultMaterial,
   defaultMaterial,
   {

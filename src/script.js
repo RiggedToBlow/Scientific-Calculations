@@ -1,4 +1,4 @@
-import * as CANNON from "cannon-es";
+import * as UTILS from "cannon-es";
 import * as dat from "dat.gui";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -44,15 +44,15 @@ const environmentMapTexture = cubeTextureLoader.load([
 
 const frictionHandler = new FrictionHandler();
 
-const ball = new Ball(0.5, new CANNON.Vec3(-10, 20, 0));
+const ball = new Ball(0.5, new UTILS.Vec3(-10, 20, 0));
 console.log(ball);
-const floorShape = new CANNON.Plane();
-const floorBody = new CANNON.Body({
+const floorShape = new UTILS.Plane();
+const floorBody = new UTILS.Body({
   mass: 0,
   shape: floorShape,
 });
 
-floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
+floorBody.quaternion.setFromAxisAngle(new UTILS.Vec3(-1, 0, 0), Math.PI * 0.5);
 
 frictionHandler.addBody(floorBody);
 frictionHandler.addBody(ball.ballBody);
@@ -61,18 +61,18 @@ scene.add(ball.ballMesh);
 /***
  * loading Donut
  */
-const torusShape = CANNON.Trimesh.createTorus(3, 3.5, 16, 16);
-const torusBody = new CANNON.Body({ mass: 0 });
+const torusShape = UTILS.Trimesh.createTorus(3, 3.5, 16, 16);
+const torusBody = new UTILS.Body({ mass: 0 });
 torusBody.addShape(torusShape);
 torusBody.position.set(5, 3.3, 0);
 torusBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
 /*torusBody.angularVelocity.set(0, -1, 0)*/
 frictionHandler.addBody(torusBody);
 
-const groundShape = new CANNON.Box(new CANNON.Vec3(500, 3, 500));
-const groundBody = new CANNON.Body({
+const groundShape = new UTILS.Box(new UTILS.Vec3(500, 3, 500));
+const groundBody = new UTILS.Body({
   shape: groundShape,
-  position: new CANNON.Vec3(0, 6, 0),
+  position: new UTILS.Vec3(0, 6, 0),
   mass: 100000,
 });
 frictionHandler.addBody(groundBody);
@@ -192,7 +192,7 @@ const applyForceOnBall = () => {
   const { y } = debugObject;
   const mu = +debugObject.Force;
   const windMu = 20;
-  const force = new CANNON.Vec3(x * mu, y * mu, z * mu);
+  const force = new UTILS.Vec3(x * mu, y * mu, z * mu);
   ball.applyImpulse(force);
 };
 
@@ -226,8 +226,8 @@ const debugObject = {
   Force: 150,
   y: 1,
   resetBall: () => {
-    ball.position = new CANNON.Vec3(-10, 20, 0);
-    ball.velocity = new CANNON.Vec3(0, 0, 0);
+    ball.position = new UTILS.Vec3(-10, 20, 0);
+    ball.velocity = new UTILS.Vec3(0, 0, 0);
   },
   goToBall: () => {
     camera.position.copy(ball.position);
@@ -276,7 +276,7 @@ const onEachFrame = () => {
   frictionHandler.world.step(1 / 60, deltaTime, 3);
   animatables.forEach(({ mesh, body }) => animate(mesh, body));
 
-  ball.applyForce(new CANNON.Vec3(debugObject.windX, 0, debugObject.windZ));
+  ball.applyForce(new UTILS.Vec3(debugObject.windX, 0, debugObject.windZ));
   if (
     !win &&
     ball.position.x >= 4.3 &&
